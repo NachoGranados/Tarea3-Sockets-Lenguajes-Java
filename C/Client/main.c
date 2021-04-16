@@ -6,13 +6,22 @@
 #include <arpa/inet.h>
 
 #define MAX 80
-#define PORT 8080
+#define PORT 6666
 #define SA struct sockaddr
 
 void func(int sockfd) {
 
     char buff[MAX];
     int n;
+
+
+
+
+    int Aux;
+
+
+
+
 
     for (;;) {
 
@@ -23,7 +32,18 @@ void func(int sockfd) {
         while ((buff[n++] = getchar()) != '\n')
             ;
 
-        write(sockfd, buff, sizeof(buff));
+
+
+
+        int longitudCadena = 6;
+        Aux = htonl(longitudCadena);
+        write(sockfd, (char *)&Aux, sizeof(longitudCadena));
+        write(sockfd, buff, longitudCadena);
+
+
+
+
+        //write(sockfd, buff, sizeof(buff));
         bzero(buff, sizeof(buff));
         read(sockfd, buff, sizeof(buff));
         printf("From Server : %s", buff);
@@ -44,7 +64,7 @@ int main() {
     int sockfd, connfd;
     struct sockaddr_in servaddr, cli;
 
-    // socket create and varification
+    // socket create and verification
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd == -1) {

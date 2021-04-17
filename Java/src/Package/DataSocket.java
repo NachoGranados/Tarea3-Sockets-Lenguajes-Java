@@ -4,7 +4,7 @@ import java.io.*;
 
 public class DataSocket implements Serializable {
 
-    public int messageLength;
+    public Integer messageLength;
     public String message;
 
     public DataSocket(String message) {
@@ -18,25 +18,25 @@ public class DataSocket implements Serializable {
 
     }
 
-    public void writeObject(java.io.DataOutputStream out) throws IOException {
+    public void writeObject(java.io.DataOutputStream output) throws IOException {
 
-        out.writeInt(messageLength + 1);
-        out.writeBytes(message);
-        out.writeByte('\0');
+        output.writeInt(messageLength + 1);
+        output.writeBytes(message);
+        output.writeByte('\0');
 
     }
 
-    public void readObject(java.io.DataInputStream in) throws IOException {
+    public void readObject(java.io.DataInputStream input) throws IOException {
 
-        messageLength = in.readInt() - 1;
+        messageLength = input.readInt() - 1;
 
         byte [] aux = null;
         aux = new byte[messageLength];
 
-        in.read(aux, 0, messageLength);
+        input.read(aux, 0, messageLength);
         message = new String(aux);
 
-        in.read(aux, 0, 1);
+        input.read(aux, 0, 1);
 
     }
 

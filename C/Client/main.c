@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define MAX 80
+#define MAX 1024
 #define PORT 6666
 #define SA struct sockaddr
 

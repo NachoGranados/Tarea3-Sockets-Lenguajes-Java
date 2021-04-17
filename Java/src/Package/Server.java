@@ -12,10 +12,10 @@ public class Server {
 
     public static void main(String[] args) {
 
-        DataInputStream din = null;
+        DataInputStream input = null;
         ServerSocket serverSocket = null;
-        DataOutputStream dout = null;
-        BufferedReader br = null;
+        DataOutputStream output = null;
+        BufferedReader buffer = null;
 
         try {
 
@@ -26,60 +26,76 @@ public class Server {
             // Listening a connection to be made between the server and the client.
             Socket socket = serverSocket.accept();
 
+            input = new DataInputStream(socket.getInputStream());
 
-            /*
+            output = new DataOutputStream(socket.getOutputStream());
+
+            buffer = new BufferedReader(new InputStreamReader(System.in));
+
+
 
             // Sending a message to the client in network format.
-            DataSocket dataSend = new DataSocket("Hola");
-            dout = new DataOutputStream(socket.getOutputStream());
+            //DataSocket dataSend = new DataSocket(buffer.readLine());
+            //output = new DataOutputStream(socket.getOutputStream());
+            //dataSend.writeObject(output);
+            //System.out.println("Enviado " + dataSend.message);
 
-            dataSend.writeObject(dout);
-            System.out.println("Enviado " + dataSend.message);
+
+
 
             // Reading a message from the server in hardware format.
-            din = new DataInputStream(socket.getInputStream());
-
-            DataSocket dataReceive = new DataSocket("");
-            dataReceive.readObject(din);
-            System.out.println("Recibido " + dataReceive.message);
-
-             */
+            //input = new DataInputStream(socket.getInputStream());
+            //DataSocket dataReceive = new DataSocket("");
+            //dataReceive.readObject(input);
+            //System.out.println("Recibido " + dataReceive.message);
 
 
-            br = new BufferedReader(new InputStreamReader(System.in));
+
 
 
 
             String strFromClient = "";
-            //String strToClient = "";
+            String strToClient = "";
 
-            while (!strFromClient.equals("stop")) {
 
-                // Sending a message to the client in network format.
-                DataSocket dataSend = new DataSocket(br.readLine());
-                dout = new DataOutputStream(socket.getOutputStream());
-                dataSend.writeObject(dout);
-                System.out.println("Enviado " + dataSend.message);
+            while (!strFromClient.equals("stop") || !strToClient.equals("stop")) {
 
-                // Reading a message from the server in hardware format.
-                din = new DataInputStream(socket.getInputStream());
+                DataSocket dataSend = new DataSocket(buffer.readLine());
+                dataSend.writeObject(output);
+                output.flush();
+                strToClient = dataSend.message;
+                System.out.println("Enviado: " + dataSend.message);
+
+
                 DataSocket dataReceive = new DataSocket("");
-                dataReceive.readObject(din);
-                System.out.println("Recibido " + dataReceive.message);
+                dataReceive.readObject(input);
+                strFromClient = dataReceive.message;
+                System.out.println("Recibido: " + dataReceive.message);
 
-                dout.flush();
+
+
+
 
 
                 /*
+                buffer = new BufferedReader(new InputStreamReader(System.in));
 
-                strFromClient = din.readUTF();
-                System.out.println("client says: " + strFromClient);
+                // Sending a message to the client in network format.
+                DataSocket dataSend = new DataSocket(buffer.readLine());
+                output = new DataOutputStream(socket.getOutputStream());
+                dataSend.writeObject(output);
+                //System.out.println("Enviado " + dataSend.message);
 
-                strToClient = br.readLine();
-                dout.writeUTF(strToClient);
-                dout.flush();
+                // Reading a message from the server in hardware format.
+                input = new DataInputStream(socket.getInputStream());
+                DataSocket dataReceive = new DataSocket("");
+                dataReceive.readObject(input);
+                System.out.println("Recibido " + dataReceive.message);
+                output.flush();
 
-                 */
+                strFromClient = input.readUTF();
+
+                */
 
             }
 
@@ -93,21 +109,21 @@ public class Server {
 
             try {
 
-                if (br != null) {
+                if (buffer != null) {
 
-                    br.close();
-
-                }
-
-                if (din != null) {
-
-                    din.close();
+                    buffer.close();
 
                 }
 
-                if (dout != null) {
+                if (input != null) {
 
-                    dout.close();
+                    input.close();
+
+                }
+
+                if (output != null) {
+
+                    output.close();
 
                 }
 

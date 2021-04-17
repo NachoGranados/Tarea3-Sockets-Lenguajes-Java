@@ -5,12 +5,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import Package.DatoSocket;
-
 
 public class Server {
 
@@ -23,38 +19,56 @@ public class Server {
 
         try {
 
-            /*
-             * Creates a server socket, bound to the specified port.
-             */
+            // Creating the socket with the specified port.
             serverSocket = new ServerSocket(6666);
             System.out.println("Package.Server is Waiting for client request... ");
 
-            /*
-             * Listens for a connection to be made to this socket and
-             * accepts it. The method blocks until a connection is
-             * made.
-             */
+            // Listening a connection to be made between the server and the client.
             Socket socket = serverSocket.accept();
+
+
+
+            // Sending a message to the client in network format.
+            DatoSocket datoEnviar = new DatoSocket("Hola");
+            dout = new DataOutputStream(socket.getOutputStream());
+
+            datoEnviar.writeObject(dout);
+            System.out.println("Enviado " + datoEnviar.d);
+
+
+
+
+            // Reading a message from the server in hardware format.
             din = new DataInputStream(socket.getInputStream());
 
+            DatoSocket datoRecibir = new DatoSocket("");
+            datoRecibir.readObject(din);
+            System.out.println("Recibido " + datoRecibir.d);
 
 
 
 
-            DatoSocket aux = new DatoSocket("");
-            aux.readObject(din);
-            System.out.println("Servidor java: Recibido " + aux.d);
+            /*
+
+            // Sending a message to the client in network format.
+            DatoSocket aux1 = new DatoSocket("Prueba");
+            dout = new DataOutputStream(socket.getOutputStream());
+
+            aux1.writeObject(dout);
+            System.out.println("Servidor: Enviado " + aux1.d);
 
 
 
 
 
+            //OutputStream outputStream = socket.getOutputStream();
+            //dout = new DataOutputStream(outputStream);
+
+
+            */
 
 
 
-
-            OutputStream outputStream = socket.getOutputStream();
-            dout = new DataOutputStream(outputStream);
 
             br = new BufferedReader(new InputStreamReader(System.in));
 

@@ -9,46 +9,64 @@
 #define PORT 6666
 #define SA struct sockaddr
 
-void func(int sockfd) {
+void func(int socketFileDescriptor) {
 
-    char buff[MAX];
-    int n;
+    char message[MAX];
+    int messageLength;
+    int messageLengthAux;
 
-
-
-
-    int Aux;
-
-
-
-
-
+    // Infinite loop
     for (;;) {
 
-        bzero(buff, sizeof(buff));
-        printf("Enter the string : ");
-        n = 0;
 
-        while ((buff[n++] = getchar()) != '\n')
+
+        // Reading a message from the server in hardware format.
+        read(socketFileDescriptor, (char *)&messageLengthAux, sizeof(int));
+        messageLength = ntohl(messageLengthAux);
+        read(socketFileDescriptor, message, messageLength);
+
+        printf("From Server: %s\n", message);
+
+
+
+
+
+
+
+        // Sending a message to the server in network format.
+        bzero(message, sizeof(message));
+
+
+
+        printf("Enter the string : ");
+        messageLength = 0;
+
+        // Loop that counts how many characters message has.
+        while ((message[messageLength++] = getchar()) != '\n')
             ;
 
+        messageLength++;
 
-
-
-        int longitudCadena = 6;
-        Aux = htonl(longitudCadena);
-        write(sockfd, (char *)&Aux, sizeof(longitudCadena));
-        write(sockfd, buff, longitudCadena);
-
+        messageLengthAux = htonl(messageLength);
+        write(socketFileDescriptor, (char *)&messageLengthAux, sizeof(messageLength));
+        write(socketFileDescriptor, message, messageLength);
 
 
 
         //write(sockfd, buff, sizeof(buff));
-        bzero(buff, sizeof(buff));
-        read(sockfd, buff, sizeof(buff));
-        printf("From Server : %s", buff);
 
-        if ((strncmp(buff, "exit", 4)) == 0) {
+
+
+        bzero(message, sizeof(message));
+
+        //messageLengthAux = 0;
+
+
+
+
+
+
+        if ((strncmp(message, "exit", 4)) == 0) {
 
             printf("Client Exit...\n");
             break;
@@ -61,13 +79,13 @@ void func(int sockfd) {
 
 int main() {
 
-    int sockfd, connfd;
-    struct sockaddr_in servaddr, cli;
+    int socketFileDescriptor;
+    struct sockaddr_in serverAddress;
 
-    // socket create and verification
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    // Creating and verification the socket.
+    socketFileDescriptor = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (sockfd == -1) {
+    if (socketFileDescriptor == -1) {
 
         printf("socket creation failed...\n");
         exit(0);
@@ -78,15 +96,15 @@ int main() {
 
     }
 
-    bzero(&servaddr, sizeof(servaddr));
+    bzero(&serverAddress, sizeof(serverAddress));
 
-    // assign IP, PORT
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    servaddr.sin_port = htons(PORT);
+    // Assigning IP address and port number to the socket.
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serverAddress.sin_port = htons(PORT);
 
-    // connect the client socket to server socket
-    if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
+    // Connecting the client to the server.
+    if (connect(socketFileDescriptor, (SA*)&serverAddress, sizeof(serverAddress)) != 0) {
 
         printf("connection with the server failed...\n");
         exit(0);
@@ -97,9 +115,8 @@ int main() {
 
     }
 
-    // function for chat
-    func(sockfd);
+    func(socketFileDescriptor);
 
-    // close the socket
-    close(sockfd);
+    close(socketFileDescriptor);
+
 }

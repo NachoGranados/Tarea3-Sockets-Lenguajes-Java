@@ -2,7 +2,7 @@ package Package;
 
 import java.io.*;
 
-public class DatoSocket {
+public class DatoSocket implements Serializable {
 
     public int c;
     public String d;

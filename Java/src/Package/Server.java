@@ -10,7 +10,58 @@ import java.net.Socket;
 
 public class Server {
 
+
+    private static void convertMessageArray(String message) { //String[][]
+
+        String[] array1 = message.split(";");
+
+        Integer array1Length = array1.length;
+
+        String[][] array2 = new String[array1Length][];
+
+        Integer n = 0;
+
+        for (String i : array1) {
+
+            array2[n] = i.split(",");
+            n++;
+
+        }
+
+        for (String[] a : array2) {
+
+            for (String b : a) {
+
+                System.out.println(b);
+
+            }
+
+            System.out.println("---------");
+
+        }
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static void main(String[] args) {
+
+        //String str = "dk,100,400;f1,200,200;f2,_,_;cr1,300,400;ca1,550,600";
+        //convertMessageArray(str);
 
         DataInputStream input = null;
         ServerSocket serverSocket = null;
@@ -32,31 +83,8 @@ public class Server {
 
             buffer = new BufferedReader(new InputStreamReader(System.in));
 
-
-
-            // Sending a message to the client in network format.
-            //DataSocket dataSend = new DataSocket(buffer.readLine());
-            //output = new DataOutputStream(socket.getOutputStream());
-            //dataSend.writeObject(output);
-            //System.out.println("Enviado " + dataSend.message);
-
-
-
-
-            // Reading a message from the server in hardware format.
-            //input = new DataInputStream(socket.getInputStream());
-            //DataSocket dataReceive = new DataSocket("");
-            //dataReceive.readObject(input);
-            //System.out.println("Recibido " + dataReceive.message);
-
-
-
-
-
-
             String strFromClient = "";
             String strToClient = "";
-
 
             while (!strFromClient.equals("stop") || !strToClient.equals("stop")) {
 
@@ -66,36 +94,10 @@ public class Server {
                 strToClient = dataSend.message;
                 System.out.println("Enviado: " + dataSend.message);
 
-
                 DataSocket dataReceive = new DataSocket("");
                 dataReceive.readObject(input);
                 strFromClient = dataReceive.message;
                 System.out.println("Recibido: " + dataReceive.message);
-
-
-
-
-
-
-                /*
-                buffer = new BufferedReader(new InputStreamReader(System.in));
-
-                // Sending a message to the client in network format.
-                DataSocket dataSend = new DataSocket(buffer.readLine());
-                output = new DataOutputStream(socket.getOutputStream());
-                dataSend.writeObject(output);
-                //System.out.println("Enviado " + dataSend.message);
-
-                // Reading a message from the server in hardware format.
-                input = new DataInputStream(socket.getInputStream());
-                DataSocket dataReceive = new DataSocket("");
-                dataReceive.readObject(input);
-                System.out.println("Recibido " + dataReceive.message);
-                output.flush();
-
-                strFromClient = input.readUTF();
-
-                */
 
             }
 

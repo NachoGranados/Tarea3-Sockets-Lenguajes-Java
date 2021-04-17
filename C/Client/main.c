@@ -5,25 +5,32 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define MAX 1024
+#define MAX 80
 #define PORT 6666
 #define SA struct sockaddr
 
-void func(int socketFileDescriptor) {
+void run(int socketFileDescriptor) {
 
     char message[MAX];
-    int messageLength = 0;
+    int messageLength;
     int messageLengthAux;
 
     // Infinite loop
     for (;;) {
 
-
-
         // Reading a message from the server in hardware format.
         read(socketFileDescriptor, (char *)&messageLengthAux, sizeof(int));
         messageLength = ntohl(messageLengthAux);
-        read(socketFileDescriptor, message, messageLength);
+        //read(socketFileDescriptor, message, messageLength);
+        //printf("From Server: %s\n", message);
+
+
+        if (read(socketFileDescriptor, message, messageLength) < 0) {
+
+            printf("ERROR");
+
+
+        }
 
         printf("From Server: %s\n", message);
 
@@ -33,11 +40,9 @@ void func(int socketFileDescriptor) {
 
 
 
-        // Sending a message to the server in network format.
         bzero(message, sizeof(message));
 
-
-
+        // Sending a message to the server in network format.
         printf("Enter the string : ");
         messageLength = 0;
 
@@ -51,20 +56,7 @@ void func(int socketFileDescriptor) {
         write(socketFileDescriptor, (char *)&messageLengthAux, sizeof(messageLength));
         write(socketFileDescriptor, message, messageLength);
 
-
-
-        //write(sockfd, buff, sizeof(buff));
-
-
-
         bzero(message, sizeof(message));
-
-        //messageLengthAux = 0;
-
-
-
-
-
 
         if ((strncmp(message, "exit", 4)) == 0) {
 
@@ -115,7 +107,7 @@ int main() {
 
     }
 
-    func(socketFileDescriptor);
+    run(socketFileDescriptor);
 
     close(socketFileDescriptor);
 

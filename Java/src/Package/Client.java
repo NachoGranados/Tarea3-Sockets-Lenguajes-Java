@@ -10,7 +10,8 @@ import java.net.Socket;
 
 public class Client {
 
-    public static void main(String[] args) {
+    //public static void main(String[] args) {
+    public static void main() {
 
         Socket socket = null;
         DataInputStream din = null;

@@ -12,7 +12,7 @@
 void func(int socketFileDescriptor) {
 
     char message[MAX];
-    int messageLength;
+    int messageLength = 0;
     int messageLengthAux;
 
     // Infinite loop

@@ -1,4 +1,4 @@
-package Instances;
+package Model;
 
 public class Fruit extends ObjectFactory {
 

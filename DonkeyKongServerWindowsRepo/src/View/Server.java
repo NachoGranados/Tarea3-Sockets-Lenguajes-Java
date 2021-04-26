@@ -26,7 +26,6 @@ public class Server {
 
         new GUI(controller);
 
-
         while (true) {
 
             System.out.println("Waiting for a client connection...");
@@ -38,6 +37,12 @@ public class Server {
 
             pool.execute(clientThread);
 
+            if (pool.isTerminated()) {
+
+                dispose(listener);
+
+            }
+
         }
 
     }
@@ -47,7 +52,7 @@ public class Server {
      * @param listener
      * @throws IOException
      */
-    private void dispose(ServerSocket listener) throws IOException {
+    private static void dispose(ServerSocket listener) throws IOException {
 
         listener.close();
 

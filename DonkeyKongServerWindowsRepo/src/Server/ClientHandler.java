@@ -38,6 +38,11 @@ public class ClientHandler implements Runnable {
     private ArrayList<Fruit> fruits2;
 
     // Constants
+    private static final Integer INITIAL_X = 50;
+    private static final Integer INITIAL_Y = 50;
+    private static final Integer INITIAL_LIFES = 1;
+    private static final Integer INITIAL_SCORE = 0;
+
     private static final Integer PIXELS_UP_DOWN = 50;
     private static final Integer PIXELS_RIGHT_LEFT = 50;
 
@@ -57,6 +62,11 @@ public class ClientHandler implements Runnable {
     private static final Integer LIANA4_END = 50;
     private static final Integer LIANA5_END = 50;
     private static final Integer LIANA6_END = 50;
+
+    private static final Integer POINTS = 100;
+
+    private static final Integer DONKEY_KONG_X = 100;
+    private static final Integer DONKEY_KONG_Y = 100;
 
     /**
      * Description: constructor method.
@@ -156,7 +166,7 @@ public class ClientHandler implements Runnable {
             // Checks if the player1 is already instantiated or not
             if (players.get(0) == null) {
 
-                player1 = new DonkeyKongJr(0,0, 1, 0);
+                player1 = new DonkeyKongJr(INITIAL_X,INITIAL_Y, INITIAL_LIFES, INITIAL_SCORE);
                 players.add(player1);
 
             }
@@ -189,7 +199,7 @@ public class ClientHandler implements Runnable {
             // Checks if the player2 is already instantiated or not
             if (players.get(1) == null) {
 
-                player2 = new DonkeyKongJr(0,0, 1, 0);
+                player2 = new DonkeyKongJr(INITIAL_X,INITIAL_Y, INITIAL_LIFES, INITIAL_SCORE);
                 players.add(player2);
 
             }
@@ -220,6 +230,15 @@ public class ClientHandler implements Runnable {
 
         // Actualizes alligators information
         moveAlligators();
+
+        // Checks if DonkeyKongJr has reached a fruit
+        checkPoints();
+
+        // Checks if DonkeyKongJr has reached an alligator
+        checkLifes();
+
+        // Checks if DonkeyKongJr has reached DonkeyKong
+        nextLevel();
 
         // The server always has to notify clients no matter what string it receives
         output = new DataOutputStream(client.getOutputStream());
@@ -406,6 +425,135 @@ public class ClientHandler implements Runnable {
                         }
 
                     }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /**
+     * Description: Checks if the player has reached a fruit and increases its points.
+     */
+    private void checkPoints() {
+
+        ArrayList< ArrayList<Fruit> > fruitsTemporal = new ArrayList<>();
+        fruitsTemporal.add(fruits1);
+        fruitsTemporal.add(fruits2);
+
+        for (Integer i = 0; i < fruitsTemporal.size(); i++) {
+
+            for (Integer j = 0; j < fruitsTemporal.get(i).size(); j++) {
+
+                // Checks match
+                if (players.get(i).getPositionX() == fruitsTemporal.get(i).get(j).getPositionX() &&
+                    players.get(i).getPositionY() == fruitsTemporal.get(i).get(j).getPositionY()) {
+
+                    // Increase points
+                    players.get(i).setScore(POINTS);
+
+                    // Delete fruit
+                    fruitsTemporal.get(i).set(j, null);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /**
+     * Description: Checks if the player has reached a alligator and loses the game.
+     */
+    private void checkLifes() {
+
+        ArrayList< ArrayList<Alligator> > alligatorsTemporal = new ArrayList<>();
+        alligatorsTemporal.add(alligators1);
+        alligatorsTemporal.add(alligators2);
+
+        ArrayList< ArrayList<Fruit> > fruitsTemporal = new ArrayList<>();
+        fruitsTemporal.add(fruits1);
+        fruitsTemporal.add(fruits2);
+
+        for (Integer i = 0; i < alligatorsTemporal.size(); i++) {
+
+            for (Integer j = 0; j < alligatorsTemporal.get(i).size(); j++) {
+
+                // Checks match
+                if (players.get(i).getPositionX() == alligatorsTemporal.get(i).get(j).getPositionX() &&
+                    players.get(i).getPositionY() == alligatorsTemporal.get(i).get(j).getPositionY()) {
+
+                    // Set initial values
+                    players.get(i).setPositionX(INITIAL_X);
+                    players.get(i).setPositionY(INITIAL_Y);
+
+                    // Decrease lifes
+                    players.get(i).setLifes(-1);
+
+                    // Restart score
+                    players.get(i).setScore(0);
+
+                    // Delete all alligators
+                    for (Integer k = 0; k < 6; k++) {
+
+                        alligatorsTemporal.get(i).set(k, null);
+
+                    }
+
+                    // Delete all fruits
+                    for (Integer l = 0; l < 6; l++) {
+
+                        fruitsTemporal.get(i).set(l, null);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /**
+     * Description: Checks if the player has reached DonkeyKong and next level will start.
+     */
+    private void nextLevel() {
+
+        for (Integer i = 0; i < players.size(); i++) {
+
+            // Checks match
+            if (players.get(i).getPositionX() == DONKEY_KONG_X &&
+                players.get(i).getPositionY() == DONKEY_KONG_Y) {
+
+                // Increases lifes
+                players.get(i).setLifes(1);
+
+                // Increases alligators speed
+                GUI.SPEED += 1;
+
+                ArrayList< ArrayList<Alligator> > alligatorsTemporal = new ArrayList<>();
+                alligatorsTemporal.add(alligators1);
+                alligatorsTemporal.add(alligators2);
+
+                // Delete all alligators
+                for (Integer j = 0; j < 6; j++) {
+
+                    alligatorsTemporal.get(i).set(j, null);
+
+                }
+
+                ArrayList< ArrayList<Fruit> > fruitsTemporal = new ArrayList<>();
+                fruitsTemporal.add(fruits1);
+                fruitsTemporal.add(fruits2);
+
+                // Delete all fruits
+                for (Integer k = 0; k < 6; k++) {
+
+                    fruitsTemporal.get(i).set(k, null);
 
                 }
 

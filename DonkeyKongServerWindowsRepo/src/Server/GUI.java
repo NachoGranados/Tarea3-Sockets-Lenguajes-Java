@@ -82,7 +82,7 @@ public class GUI {
     private static final Integer LIANA6_X = 100;
     private static final Integer LIANA6_Y = 100;
 
-    private static final Integer SPEED = 1;
+    public static Integer SPEED = 1;
 
     /**
      * Description: constructor method.
@@ -154,8 +154,8 @@ public class GUI {
 
                 comboBoxPlayer.setEnabled(true);
 
-                //players.set(0, new DonkeyKongJr(0,0,0,0));
-                //players.set(1, new DonkeyKongJr(0,0,0,0));
+                players.set(0, new DonkeyKongJr(0,0,0,0));
+                players.set(1, new DonkeyKongJr(0,0,0,0));
 
                 DefaultComboBoxModel<String> playerModel = new DefaultComboBoxModel<>(getDynamicPlayer());
                 comboBoxPlayer.setModel(playerModel);

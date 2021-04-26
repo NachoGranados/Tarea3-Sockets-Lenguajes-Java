@@ -1,10 +1,8 @@
 package Instances;
 
-public class DonkeyKongJr {
+public class DonkeyKongJr extends ObjectFactory {
 
     // Attributes for DonkeyKongJr instance
-    private Integer positionX;
-    private Integer positionY;
     private Integer lifes;
     private Integer score;
 
@@ -17,53 +15,15 @@ public class DonkeyKongJr {
      */
     public DonkeyKongJr(Integer positionX, Integer positionY, Integer lifes, Integer score) {
 
-        this.positionX = positionX;
-        this.positionY = positionY;
+        super(positionX, positionY);
+
         this.lifes = lifes;
         this.score = score;
 
     }
 
     /**
-     * Description: returns X position of DonkeyKongJr.
-     */
-    public Integer getPositionX() {
-
-        return positionX;
-
-    }
-
-    /**
-     * Description: sets X position to DonkeyKongJr.
-     * @param positionX
-     */
-    public void setPositionX(Integer positionX) {
-
-        this.positionX += positionX;
-
-    }
-
-    /**
-     * Description: returns Y position of DonkeyKongJr.
-     */
-    public Integer getPositionY() {
-
-        return positionY;
-
-    }
-
-    /**
-     * Description: sets Y position to DonkeyKongJr.
-     * @param positionY
-     */
-    public void setPositionY(Integer positionY) {
-
-        this.positionY += positionY;
-
-    }
-
-    /**
-     * Description: returns lifes of DonkeyKongJr.
+     * Description: returns lifes of the DonkeyKongJr.
      */
     public Integer getLifes() {
 

@@ -1,11 +1,9 @@
 package Instances;
 
-public class Fruit {
+public class Fruit extends ObjectFactory {
 
-    // Attributes for Fruit { instance
+    // Attribute for Fruit
     private Integer value;
-    private Integer positionX;
-    private Integer positionY;
 
     // Constant
     private static final Integer POINTS = 100;
@@ -17,9 +15,9 @@ public class Fruit {
      */
     public Fruit(Integer positionX, Integer positionY) {
 
+        super(positionX, positionY);
+
         this.value = POINTS;
-        this.positionX = positionX;
-        this.positionY = positionY;
 
     }
 
@@ -29,44 +27,6 @@ public class Fruit {
     public Integer getValue() {
 
         return value;
-
-    }
-
-    /**
-     * Description: returns X position of fruit.
-     */
-    public Integer getPositionX() {
-
-        return positionX;
-
-    }
-
-    /**
-     * Description: sets X position to fruit.
-     * @param positionX
-     */
-    public void setPositionX(Integer positionX) {
-
-        this.positionX += positionX;
-
-    }
-
-    /**
-     * Description: returns Y position of fruit.
-     */
-    public int getPositionY() {
-
-        return positionY;
-
-    }
-
-    /**
-     * Description: sets Y position to fruit.
-     * @param positionY
-     */
-    public void setPositionY(Integer positionY) {
-
-        this.positionY += positionY;
 
     }
 
